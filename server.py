@@ -37,7 +37,7 @@ class RoverControlServicer(rovers_pb2_grpc.RoverControlServicer):
 
     def MinePin(self, request, context):
         print(f'Mine Disarmed at row: {request.row}, col: {request.col}')
-        print(f'Pin Received: {request.pin_num} for Rover {request.rover_id}')
+        print(f'Pin Received: {request.pin_num} for Rover {request.rover_id}\n')
         return rovers_pb2.Empty()
 
 def serve():
