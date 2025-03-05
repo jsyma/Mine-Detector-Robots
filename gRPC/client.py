@@ -21,7 +21,7 @@ def main():
         rover_map = [[val for val in row.mine_val] for row in response.map_row]
 
         map_row_size, map_col_size = response.row, response.col
-        print("Map data:")
+        print("\nMap Data:")
         for map_row in rover_map:
             print(map_row) 
         
@@ -29,8 +29,14 @@ def main():
         request = rovers_pb2.RoverID(id=rover_id)
         response = stub.GetCommands(request)
         rover_commands = response.commands
-        print(rover_commands)
+        print(f'\nRover {rover_id} commands: {rover_commands}\n')
+
+        # Start of Command Execution
+        request = rovers_pb2.BotMessage(_message=f'Starting execution of commands for Rover {rover_id}\n')
+        response = stub.NotifyServer(request)
         updated_map = rover_movement(rover_id, rover_commands, [map_row_size, map_col_size], rover_map, stub)
+
+        # Create Path File after Command Execution
         create_rover_path(rover_id, updated_map, 'output')
 
 def rotate_rover(current_direction, move) -> str:
@@ -128,6 +134,9 @@ def rover_movement(rover_id, commands, map_info, map, stub):
                 map[rover_row_pos][rover_col_pos] = "*"
     if success:
         request = rovers_pb2.BotMessage(_message=f'Rover {rover_id} has executed all the commands successfully.')
+        response = stub.NotifyServer(request)
+    else: 
+        request = rovers_pb2.BotMessage(_message=f'Rover {rover_id} did not finish all the commands due to mine explosion.')
         response = stub.NotifyServer(request)
 
     return map
