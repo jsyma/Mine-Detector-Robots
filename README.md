@@ -66,9 +66,18 @@ This project focuses on developing rovers (clients) capable of detecting and map
     - Navigate to `/docs`
 
 #### To run this program With Azure/Docker: 
-1. **Build the Docker Image** 
+1. **Set Up Azure Container Registry**
+    - Create an Azure Container Registry in the Azure Portal (if not already done)
+2. **Set Up Docker Locally**
+    - Make sure you have Docker Installed 
+3. **Login to Azure Container Registry Using Docker**
+    - `docker login <your-repository-name>.azurecr.io`
+4. **Build the Docker Image** 
     - `docker build -t <your-repository-name>.azurecr.io/myapp:latest .`
-2. **Push the Docker Image to Azure Container Registry**
+5. **Push the Docker Image to Azure Container Registry**
     -  `docker push <your-repository-name>.azurecr.io/myapp:latest`
-3. **Access the Web App**
-    - Use the default or provided Azure domain
+6. **Create an Azure Web App**
+    - On the Azure Portal, create a `Web App for Containers`
+    - In the Containers Tab, select `Azure Container Registry` as the Image Source as well as the deployed Image and Tag
+7. **Access the Web App**
+    - Use the default or provided Azure domain to access the deployed application
